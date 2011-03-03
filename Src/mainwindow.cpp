@@ -12,3 +12,8 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+MainWindow::SendText() {
+    QString text(this->getUserText());
+    networkSend(text.toAscii());
+}
