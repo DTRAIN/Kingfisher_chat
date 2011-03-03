@@ -1,1 +1,4 @@
 Kingfisher chat server and client for linux
+
+This is a simple chat server and client application.
+It will be written using the unix sockets api with a QT front-end gui
