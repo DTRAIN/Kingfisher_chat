@@ -14,15 +14,21 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent, QString& group,
+                        QString& user, int sock);
     QString getUserText();
     void setChatText();
     ~MainWindow();
 
-private:
-    Ui::MainWindow *ui;
 public slots:
-    void SendText();
+    void sendText();
     QString recvText();
+
+private:
+    Ui::MainWindow *ui_;
+    QString groupname_;
+    QString username_;
+    int sock_;
 };
 
 #endif // MAIN_H

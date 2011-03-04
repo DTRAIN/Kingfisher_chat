@@ -3,17 +3,30 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui_(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+    ui_->setupUi(this);
+}
+
+MainWindow::MainWindow(QWidget *parent, QString& group, QString& user, int sock):
+        QMainWindow(parent), groupname_(group), username_(user), sock_(sock),
+        ui_(new Ui::MainWindow) {
+
+    ui_->setupUi(this);
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+    delete ui_;
 }
 
-MainWindow::SendText() {
+void MainWindow::sendText() {
     QString text(this->getUserText());
-    networkSend(text.toAscii());
+    //createTextPacket(text, this->username_, this->groupname_);
+    //networkSend(text.toAscii());
+}
+
+QString MainWindow::getUserText() {
+    //return textEdit.toPlainText();
+    return QString();
 }

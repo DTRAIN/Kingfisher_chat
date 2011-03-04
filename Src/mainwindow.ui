@@ -2,16 +2,22 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>412</width>
-    <height>354</height>
+    <width>666</width>
+    <height>363</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="animated">
+   <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTextEdit" name="textEdit">
@@ -33,7 +39,7 @@ border-radius:8px;</string>
      <rect>
       <x>310</x>
       <y>280</y>
-      <width>111</width>
+      <width>101</width>
       <height>61</height>
      </rect>
     </property>
@@ -45,9 +51,9 @@ border-radius:8px;</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>0</y>
+      <y>20</y>
       <width>411</width>
-      <height>261</height>
+      <height>241</height>
      </rect>
     </property>
     <property name="verticalScrollBarPolicy">
@@ -73,13 +79,62 @@ border-radius:8px;</string>
      <string>Type a message below:</string>
     </property>
    </widget>
+   <widget class="QListWidget" name="listWidget">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>20</y>
+      <width>256</width>
+      <height>321</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>0</y>
+      <width>131</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Users in Current Group:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Current Group:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>0</y>
+      <width>311</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>412</width>
+     <width>666</width>
      <height>21</height>
     </rect>
    </property>
@@ -87,6 +142,7 @@ border-radius:8px;</string>
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionLeave_Group"/>
    </widget>
    <addaction name="menuKingfisher"/>
   </widget>
@@ -98,6 +154,11 @@ border-radius:8px;</string>
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionLeave_Group">
+   <property name="text">
+    <string>Close</string>
    </property>
   </action>
  </widget>
