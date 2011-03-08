@@ -1,0 +1,3 @@
+SERVER_HDRS +=  .
+
+SERVER_SRCS +=  .
