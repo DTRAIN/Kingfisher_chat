@@ -63,6 +63,13 @@ int bind_server_sock(int sock) {
     return sock;
 }
 
+int accept_connection(int newsock, int listensock) {
+
+    struct sockaddr_in client;
+    int len = sizeof(client);
+    
+    return (sock = accept(listensock, (struct sockaddr*)&client, &len));
+}
 
 int listen_server_sock(int sock) {
     if(listen(sock, MAXREQ) == -1) {
@@ -82,4 +89,31 @@ int recv_packet(int sock, char* buf) {
 	toRead -= nRead;
     }
     return nRead;
+}
+
+void init_select(fd_set* set, int* clients, int initsock) {
+    int i;
+
+    for (i = 0; i < FD_SETSIZE; i++) {
+	clients[i] = -1;
+    }
+
+    FD_ZERO(set);
+    FD_SET(initsock, set);
+}
+int add_select_sock(fd_set* set, int* clients, int addsock) {
+    int i;
+
+    for (i = 0; i < FD_SETSIZE; i++) {
+	if (clients[i] < 0) {
+	    clients[i] = addsock;
+	    break;
+	}
+    }
+    if(i == FD_SETSIZE) {
+	serv_error(SELECT_ERR, "select");
+    }
+    FD_SET (addsock, set);
+
+    return i;
 }

@@ -16,6 +16,9 @@ int create_sock(void);
 int connect_client_sock(int sock, char* host_addr);
 int bind_server_sock(int sock);
 int listen_server_sock(int sock);
+int accept_connection(int sock);
 int send_packet(int sock, char* packet);
 void recv_packet(int sock, char* buf);
+void init_select(fd_set* set, int* clients, int initsock);
+void add_select_sock(fd_set* set, int* clients, int addsock);
 #endif

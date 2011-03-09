@@ -3,5 +3,6 @@
 #define SOCK_ERR 1
 #define READ_ERR 2
 #define WRITE_ERR 3
+#define SELECT_ERR 4
 void serv_err(int retval, char* msg);
 #endif
