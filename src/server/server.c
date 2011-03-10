@@ -1,52 +1,91 @@
 #include "network.h"
 
+void* echo_thread(void*);
+
 int main(void) {
-    int lsock, nsock, asock;
-    int max_clients, numselected;
+    int listensock, nextsock, acceptsock,
+	readsock, echosock;
+    int totalclients, numselected;
     int clients[FD_SETSIZE];
-    fd_set rset, allset;
+    fd_set readyset, allset;
     struct sockaddr_in* client;
     
     //create bind and listen on lsock.
-    lsock = create_sock();
-    lsock = bind_server_sock(lsock);
-    lsock = listen_server_sock(lsock);
-    
-    if(lsock == 0) {
-	serv_error(SOCK_ERR, "create, or bind, or listen");	
-    }
+    listensock = create_sock();
+    listensock = bind_server_sock(listensock);
+    listensock = listen_server_sock(listensock);
 
     //setup for select
-    nsock = lsock;
-    max_clients = -1;
-    init_select(&allset, clients, lsock);
+    nextsock = listensock;
+    totalclients = -1;
+    init_select(&allset, clients, listensock);
 
     while(TRUE) {
 
-	rset = allset;
-	numselected = select(nsock+1, &rset, NULL, NULL, NULL);
+	readyset = allset;
+	numselected = select(nextsock+1, &readyset, NULL, NULL, NULL);
 
-	if(FD_ISSET(lsock, &rset)) {
+	if(FD_ISSET(listensock, &rset)) {
 
 	    int i;
 
-	    if ((asock = accept_connection(asock, lsock)) == -1) {
+	    if ((acceptsock = accept_connection(acceptsock, listensock)) == -1) {
 		serv_error(SOCK_ERR, "accept");
 	    }
 
-	    i = add_select_sock(&allset, clients, asock);
+	    i = add_select_sock(&allset, clients, acceptsock);
 
-	    if (asock > nsock) {
-		nsock = asock;
+	    if (acceptsock > nextsock) {
+		nextsock = acceptsock;
 	    }
-	    if (i > max_clients) {
-		max_clients = i;
+	    if (i > totalclients) {
+		totalclients = i;
 	    }
 	    if (--numselected <= 0) {
 		continue;
 	    }
 
 	}
-	
+
+	for (i = 0; i <= totalclients; i++) {
+
+	    if (clients[i] >= 0) {
+		readsock = clients[i];
+	    } else {
+		continue;
+	    }
+
+	    if (FD_ISSET(readsock, &readyset)) {
+		char buf[PACKETSIZE];
+
+		recv_packet(readsock, buf);
+				
+		//write to echo thread
+									            				
+		if (--numselected <= 0) {
+		    break;
+		}
+	    }
+	}
+
     }
+}
+
+void* echo_thread(void*) {
+
+    int ipcsocket;
+
+    ipcsocket = create_ipc_socket;
+    ipcsocket = bind_ipc_socket;
+    
+    while(1) {
+	char buf[PACKETSIZE];
+	if(read(ipcsocket, buf, PACKETSIZE) > 0) {
+	    for(int i = 0; clients[i] != -1; ++i) {
+		send_packet(clients[i], buf);
+	    }
+	}
+    }
+
+    return 0;
 }

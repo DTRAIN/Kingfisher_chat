@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Kingfisher Chat Client</string>
   </property>
   <property name="animated">
    <bool>true</bool>
@@ -142,17 +142,17 @@ border-radius:8px;</string>
   </action>
   <action name="actionConnect">
    <property name="text">
-    <string>connect</string>
+    <string>Connect</string>
    </property>
   </action>
   <action name="actionClose">
    <property name="text">
-    <string>disconnect</string>
+    <string>Disconnect</string>
    </property>
   </action>
   <action name="actionQuit_2">
    <property name="text">
-    <string>quit</string>
+    <string>Quit</string>
    </property>
   </action>
  </widget>

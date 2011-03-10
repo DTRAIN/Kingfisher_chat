@@ -109,13 +109,13 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Kingfisher Chat Client", 0, QApplication::UnicodeUTF8));
         actionFile->setText(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         actionQuit->setText(QApplication::translate("MainWindow", "Quit", 0, QApplication::UnicodeUTF8));
         actionLeave_Group->setText(QApplication::translate("MainWindow", "Close", 0, QApplication::UnicodeUTF8));
-        actionConnect->setText(QApplication::translate("MainWindow", "connect", 0, QApplication::UnicodeUTF8));
-        actionClose->setText(QApplication::translate("MainWindow", "disconnect", 0, QApplication::UnicodeUTF8));
-        actionQuit_2->setText(QApplication::translate("MainWindow", "quit", 0, QApplication::UnicodeUTF8));
+        actionConnect->setText(QApplication::translate("MainWindow", "Connect", 0, QApplication::UnicodeUTF8));
+        actionClose->setText(QApplication::translate("MainWindow", "Disconnect", 0, QApplication::UnicodeUTF8));
+        actionQuit_2->setText(QApplication::translate("MainWindow", "Quit", 0, QApplication::UnicodeUTF8));
         pushButton->setText(QApplication::translate("MainWindow", "Send", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("MainWindow", "Type a message below:", 0, QApplication::UnicodeUTF8));
         label_4->setText(QString());

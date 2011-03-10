@@ -4,7 +4,9 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <netdb.h>
 #include <stdlib.h>
+#include <string.h>
 #include <strings.h>
 #include <arpa/inet.h>
 #include <unistd.h>
@@ -13,12 +15,14 @@
 #define BUFSIZE ((PACKETSIZE)*(10))
 #define MAXREQ 5
 int create_sock(void);
+int create_ipc_socket(void);
+int bind_ipc_socket(void);
 int connect_client_sock(int sock, char* host_addr);
 int bind_server_sock(int sock);
 int listen_server_sock(int sock);
-int accept_connection(int sock);
+int accept_connection(int newsock, int listensock);
 int send_packet(int sock, char* packet);
-void recv_packet(int sock, char* buf);
+int recv_packet(int sock, char* buf);
 void init_select(fd_set* set, int* clients, int initsock);
-void add_select_sock(fd_set* set, int* clients, int addsock);
+int add_select_sock(fd_set* set, int* clients, int addsock);
 #endif
