@@ -10,13 +10,15 @@
 #include <strings.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include "sems.h"
+#include "errors.h"
 #define PORT 10127
 #define PACKETSIZE 4096
 #define BUFSIZE ((PACKETSIZE)*(10))
 #define MAXREQ 5
 int create_sock(void);
-int create_ipc_socket(void);
-int bind_ipc_socket(void);
+int create_ipc_sock(void);
+int bind_ipc_sock(int sock);
 int connect_client_sock(int sock, char* host_addr);
 int bind_server_sock(int sock);
 int listen_server_sock(int sock);

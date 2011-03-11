@@ -1,3 +1,1 @@
-SERVER_HDRS +=  .
-
-SERVER_SRCS +=  .
+SERVER_SRCS +=  ./server/server.c

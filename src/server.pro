@@ -1,9 +1,10 @@
 include(./Kingfisher.pri)
 include(./server/server.pri)
+include(./network/network.pri)
 
 DEPENDPATH += .
 INCLUDEPATH += .
-OBJECTS_DIR = ../obj/server
+OBJECTS_DIR = ../obj
 
-HEADERS += $$SERVER_HDRS
-SOURCES += $$SERVER_SOURCES
+HEADERS += $$NETWORK_HDRS
+SOURCES += $$NETWORK_SRCS $$SERVER_SRCS

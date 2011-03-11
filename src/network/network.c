@@ -53,18 +53,17 @@ int create_ipc_sock(void) {
     return sock;
 }
 
-//int bind_ipc_sock(int sock) {
+int bind_ipc_sock(int sock) {
 
-// struct sockaddr_un* addr = malloc(sizeof(struct sockaddr));
-// addr.sun_family = AF_UNIX;
-// strcpy(addr.sun_path, "127.0.0.1");
-// if(bind(sock, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
-//	serv_err(SOCK_ERR, "bind");
-// }
+    struct sockaddr_in addr;
+    addr.sin_family = AF_UNIX;
+    addr.sin_addr.s_addr = htonl(inet_addr("127.0.0.1"));
+    if(bind(sock, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
+	serv_err(SOCK_ERR, "bind");
+    }
 
-//  return sock;
-
-//}
+    return sock;
+}
 int connect_client_sock(int sock, char* host_addr) {
     struct hostent *host;
     struct sockaddr_in server;

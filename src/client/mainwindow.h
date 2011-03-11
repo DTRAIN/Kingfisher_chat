@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QString>
 #include "../ui_mainwindow.h"
-#include "../ui_dialog.h"
+#include "dialog.h"
 extern "C" {
 #include "../network/network.h"
 }
@@ -13,30 +13,37 @@ namespace Ui {
     class MainWindow;
 }
 
+void* readThread(void*);
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
+    static int sid_;
     explicit MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
-
     QString getUserText();
-    void addChatText(QString& text);
     QString createTextPacket(const QString& data, const QString& username);
-
+    int getSock() {
+	return sock_;
+    }
+signals:
+    void connectServer(QString& servaddr);
 public slots:
     void sendText();
-    QString recvText();
-    void initNetworking();
     void connectToServer(QString& servaddr);
+    void openDlg();
+    void closeDlg();
     void getServInfo();
-
+    void addChatText(QString text);
 private:
     QString username_;
+    QString servaddr_;
     int sock_;
     Ui::MainWindow *ui_;
-    Ui::Dialog *dialog_;
+    Dialog *dialog_;
+    static void* add;
 };
 
 #endif // MAIN_H
