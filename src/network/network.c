@@ -55,14 +55,21 @@ int create_ipc_sock(void) {
 
 int bind_ipc_sock(int sock) {
 
-    struct sockaddr_in addr;
-    addr.sin_family = AF_UNIX;
-    addr.sin_addr.s_addr = htonl(inet_addr("127.0.0.1"));
+    struct sockaddr_un addr;
+    addr.sun_family = AF_UNIX;
+    strncpy(addr.sun_path, "127.0.0.1", sizeof("127.0.0.1"));
     if(bind(sock, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
 	serv_err(SOCK_ERR, "bind");
     }
 
     return sock;
+}
+
+int send_ipc_packet(int sock, char* buf) {
+    return write(sock, buf, PACKETSIZE);
+}
+int read_ipc_packet(int sock, char* buf) {
+    return read(sock, buf, PACKETSIZE);
 }
 int connect_client_sock(int sock, char* host_addr) {
     struct hostent *host;
