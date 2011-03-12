@@ -74,7 +74,7 @@ ssize_t send_ipc_packet(int sock, char* buf) {
     return sendto(sock, buf, PACKETSIZE, 0, (struct sockaddr*)&addr, sizeof(addr));
 }
 ssize_t read_ipc_packet(int sock, char* buf) {
-    return read(sock, buf, PACKETSIZE);
+    return recv(sock, buf, PACKETSIZE, 0);
 }
 int connect_client_sock(int sock, char* host_addr) {
     struct hostent *host;

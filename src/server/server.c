@@ -75,7 +75,7 @@ int main(void) {
 		P(sid);
 		recv_packet(readsock, buf);
 		V(sid);	
-		send_packet(echosock, buf);
+		send_ipc_packet(echosock, buf);
 		if (--numselected <= 0) {
 		    break;
 		}
