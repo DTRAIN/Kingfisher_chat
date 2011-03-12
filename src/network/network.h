@@ -20,8 +20,8 @@
 int create_sock(void);
 int create_ipc_sock(void);
 int bind_ipc_sock(int sock);
-int send_ipc_packet(int sock, char* buf);
-int read_ipc_packet(int sock, char* buf);
+ssize_t send_ipc_packet(int sock, char* buf);
+ssize_t read_ipc_packet(int sock, char* buf);
 int connect_client_sock(int sock, char* host_addr);
 int bind_server_sock(int sock);
 int listen_server_sock(int sock);

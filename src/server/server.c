@@ -28,7 +28,6 @@ int main(void) {
 
     //create IPC socket
     echosock = create_ipc_sock();
-    echosock = bind_ipc_sock(echosock);
 
     //create thread
     if(pthread_create(&tid, NULL, echo_thread, NULL) != 0) {
@@ -96,7 +95,7 @@ void* echo_thread(void* arg) {
 
     while(1) {
 	char buf[PACKETSIZE];
-	if(read(ipcsocket, buf, PACKETSIZE) > 0) {
+	if(read_ipc_packet(ipcsocket, buf) > 0) {
 	    int i;
 	    for(i = 0; clients[i] != -1; ++i) {
 		P(sid);

@@ -13,7 +13,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui_(new Ui::MainWi
     connect(ui_->pushButton, SIGNAL(clicked()), this, SLOT(sendText()));
     connect(ui_->actionConnect, SIGNAL(triggered()), this, SLOT(openDlg()));
     connect(ui_->actionQuit_2, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
-    sid_ = initsem();
 }
 
 MainWindow::~MainWindow() {
@@ -41,9 +40,7 @@ QString MainWindow::createTextPacket(const QString& data, const QString& usernam
 void MainWindow::sendText() {
     QString text(getUserText());
     QString packet(createTextPacket(text, this->username_));
-    P(sid_);
     send_packet(sock_, (char*)packet.toAscii().constData());
-    V(sid_);
 }
 
 void MainWindow::connectToServer(QString& servaddr) {
@@ -86,11 +83,9 @@ void* readThread(void* arg) {
 
 	char buf[PACKETSIZE];
 
-	P(MainWindow::sid_);
 	if(recv_packet(mw->getSock(), buf) != 0) {
 	    mw->addChatText(QString(buf));
 	}
-	V(MainWindow::sid_);
 
     }
     return arg;
