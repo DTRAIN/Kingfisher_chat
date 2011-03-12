@@ -57,6 +57,7 @@ int bind_ipc_sock(int sock) {
 
     struct sockaddr_un addr;
     addr.sun_family = AF_UNIX;
+    unlink("127.0.0.1");
     strncpy(addr.sun_path, "127.0.0.1", sizeof("127.0.0.1"));
     if(bind(sock, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
 	serv_err(SOCK_ERR, "bind");
