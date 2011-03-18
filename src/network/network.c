@@ -28,54 +28,6 @@ int create_sock(void) {
     return sock;
 }
 
-int create_ipc_sock(void) {
-    int sock, opt = 1, ret;
-
-    if((sock = socket(AF_UNIX, SOCK_DGRAM, 0)) == -1) {
-	    serv_err(SOCK_ERR, "socket");
-    }
-
-    //reuse addr incase of program exit.
-    opt = 1;
-    if((ret = setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) == -1) {
-	    serv_err(SOCK_ERR, "setsockopt");
-    }
-
-   //set socket buffer sizes.
-    opt = BUFSIZE;
-    if((ret = setsockopt(sock, SOL_SOCKET, SO_SNDBUF, &opt, sizeof(opt))) == -1) {
-	    serv_err(SOCK_ERR, "setsockopt");
-    }
-    if((ret = setsockopt(sock, SOL_SOCKET, SO_RCVBUF, &opt, sizeof(opt)))) {
-	    serv_err(SOCK_ERR, "setsockopt");
-    }
-
-    return sock;
-}
-
-int bind_ipc_sock(int sock) {
-
-    struct sockaddr_un addr;
-    addr.sun_family = AF_UNIX;
-    strncpy(addr.sun_path, "127.0.0.1", sizeof("127.0.0.1"));
-    if(bind(sock, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
-	serv_err(SOCK_ERR, "bind");
-    }
-
-    return sock;
-}
-
-ssize_t send_ipc_packet(int sock, char* buf) {
-
-    struct sockaddr_un addr;
-    addr.sun_family = AF_UNIX;
-
-    strncpy(addr.sun_path, "127.0.0.1", sizeof("127.0.0.1"));
-    return sendto(sock, buf, PACKETSIZE, 0, (struct sockaddr*)&addr, sizeof(addr));
-}
-ssize_t read_ipc_packet(int sock, char* buf) {
-    return recv(sock, buf, PACKETSIZE, 0);
-}
 int connect_client_sock(int sock, char* host_addr) {
     struct hostent *host;
     struct sockaddr_in server;

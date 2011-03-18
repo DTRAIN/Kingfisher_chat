@@ -18,7 +18,7 @@
 #define BUFSIZE ((PACKETSIZE)*(10))
 #define MAXREQ 5
 int create_sock(void);
-int create_ipc_sock(void);
+void create_ipc_sock(int*);
 int bind_ipc_sock(int sock);
 ssize_t send_ipc_packet(int sock, char* buf);
 ssize_t read_ipc_packet(int sock, char* buf);
