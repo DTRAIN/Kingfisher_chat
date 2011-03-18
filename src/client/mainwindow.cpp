@@ -2,6 +2,7 @@
 #include "dialog.h"
 #include <QApplication>
 #include <QDialogButtonBox>
+#include <QString>
 #include <pthread.h>
 extern "C" {
 #include "../network/network.h"
@@ -80,13 +81,10 @@ void* readThread(void* arg) {
     MainWindow* mw = (MainWindow*) arg;
 
     while(1) {
-
 	char buf[PACKETSIZE];
-
 	if(recv_packet(mw->getSock(), buf) != 0) {
 	    mw->addChatText(QString(buf));
 	}
-
     }
     return arg;
 }
