@@ -35,7 +35,7 @@ int main(void) {
 		serv_err(SOCK_ERR, "accept");
 	    }
 
-            i = add_select_sock(&allset, acceptsock);
+        i = add_select_sock(&allset, acceptsock);
 
 	    if (acceptsock > nextsock) {
 		nextsock = acceptsock;
@@ -51,21 +51,19 @@ int main(void) {
 
 	for (j = 0; j <= totalclients; j++) {
 
-	    if (clients[j] >= 0) {
-		readsock = clients[j];
-	    } else {
-		continue;
+	    if ((readsock = clients[j]) < 0) {
+	        continue;
 	    }
 
 	    if (FD_ISSET(readsock, &readyset)) {
-		char buf[PACKETSIZE];
+		    char buf[PACKETSIZE];
 
-		recv_packet(readsock, buf);
+		    recv_packet(readsock, buf);
+		    echo(buf);
 
-		echo(buf);
-		if (--numselected <= 0) {
-		    break;
-		}
+		    if (--numselected <= 0) {
+		        break;
+		    }
 	    }
 	}
     }
