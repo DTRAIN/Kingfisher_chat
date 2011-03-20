@@ -92,10 +92,7 @@ int recv_packet(int sock, char* buf) {
         buf += nRead;
         toRead -= nRead;
     }
-    if(nRead == -1) {
-        return 0;
-    }
-    return 1;
+    return nRead;
 }
 
 void init_select(fd_set* set, int initsock) {

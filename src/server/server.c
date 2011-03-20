@@ -57,9 +57,14 @@ int main(void) {
 
 	    if (FD_ISSET(readsock, &readyset)) {
 		    char buf[PACKETSIZE];
-
-		    recv_packet(readsock, buf);
-		    
+		    ssize_t n;
+		    n = recv_packet(readsock, buf);
+		    if(n == -1) {
+		      printf("connection closed\n");
+		      close(readsock);
+		      FD_CLR(readsock, &allset);
+		      clients[j] = -1;
+		    }
 		    printf("received message\n");
 		    echo(buf);
 
