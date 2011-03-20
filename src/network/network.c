@@ -82,6 +82,10 @@ int listen_server_sock(int sock) {
     return sock;
 }
 
+void closeConnection(int sock) {
+    close(sock);
+}
+
 int send_packet(int sock, char* packet) {
     return send(sock, packet, PACKETSIZE, 0);
 }

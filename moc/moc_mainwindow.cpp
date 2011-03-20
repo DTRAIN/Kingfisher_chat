@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Sun Mar 20 10:26:43 2011
+** Created: Sun Mar 20 10:49:53 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.1)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -38,9 +38,10 @@ static const uint qt_meta_data_MainWindow[] = {
       67,   11,   11,   11, 0x0a,
       78,   12,   11,   11, 0x0a,
      104,   11,   11,   11, 0x0a,
-     114,   11,   11,   11, 0x0a,
-     125,   11,   11,   11, 0x0a,
-     139,   45,   11,   11, 0x0a,
+     127,   11,   11,   11, 0x0a,
+     137,   11,   11,   11, 0x0a,
+     148,   11,   11,   11, 0x0a,
+     162,   45,   11,   11, 0x0a,
 
        0        // eod
 };
@@ -48,7 +49,8 @@ static const uint qt_meta_data_MainWindow[] = {
 static const char qt_meta_stringdata_MainWindow[] = {
     "MainWindow\0\0servaddr\0connectServer(QString&)\0"
     "text\0display(QString)\0sendText()\0"
-    "connectToServer(QString&)\0openDlg()\0"
+    "connectToServer(QString&)\0"
+    "disconnectFromServer()\0openDlg()\0"
     "closeDlg()\0getServInfo()\0addChatText(QString)\0"
 };
 
@@ -85,13 +87,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 1: display((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 2: sendText(); break;
         case 3: connectToServer((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 4: openDlg(); break;
-        case 5: closeDlg(); break;
-        case 6: getServInfo(); break;
-        case 7: addChatText((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 4: disconnectFromServer(); break;
+        case 5: openDlg(); break;
+        case 6: closeDlg(); break;
+        case 7: getServInfo(); break;
+        case 8: addChatText((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
-        _id -= 8;
+        _id -= 9;
     }
     return _id;
 }

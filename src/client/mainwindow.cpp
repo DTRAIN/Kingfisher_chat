@@ -14,9 +14,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui_(new Ui::MainWi
     connect(ui_->pushButton, SIGNAL(clicked()), this, SLOT(sendText()));
     connect(ui_->actionConnect, SIGNAL(triggered()), this, SLOT(openDlg()));
     connect(ui_->actionQuit_2, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
+    connect(ui_->actionClose, SIGNAL(triggered()), this, SLOT(disconnectFromServer()));
 }
 
 MainWindow::~MainWindow() {
+    closeConnection(sock_);
     delete MainWindow::ui_;
 }
 
@@ -51,6 +53,10 @@ void MainWindow::connectToServer(QString& servaddr) {
     if(pthread_create(&tid, NULL, readThread, this) != 0 ) {
 	    serv_err(THREAD_ERR, (char*)"pthread_create");
     }
+}
+
+void MainWindow::disconnectFromServer() {
+    closeConnection(sock_);
 }
 
 void MainWindow::openDlg() {

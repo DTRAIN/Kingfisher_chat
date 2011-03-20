@@ -37,6 +37,7 @@ signals:
 public slots:
     void sendText();
     void connectToServer(QString& servaddr);
+    void disconnectFromServer();
     void openDlg();
     void closeDlg();
     void getServInfo();
