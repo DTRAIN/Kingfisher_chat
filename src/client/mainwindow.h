@@ -25,11 +25,15 @@ public:
     virtual ~MainWindow();
     QString getUserText();
     QString createTextPacket(const QString& data, const QString& username);
+    void displayBuf(QString buf) {
+        emit(display(buf));
+    }
     int getSock() {
 	return sock_;
     }
 signals:
     void connectServer(QString& servaddr);
+    void display(QString text);
 public slots:
     void sendText();
     void connectToServer(QString& servaddr);

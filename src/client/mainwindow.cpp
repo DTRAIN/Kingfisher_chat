@@ -59,6 +59,7 @@ void MainWindow::openDlg() {
     connect(this, SIGNAL(connectServer(QString&)), this, SLOT(connectToServer(QString&)));
     connect(dialog_->ui->buttonBox, SIGNAL(accepted()), this, SLOT(getServInfo()));
     connect(dialog_->ui->buttonBox, SIGNAL(rejected()), this, SLOT(closeDlg()));
+    connect(this, SIGNAL(display(QString)), this, SLOT(addChatText(QString)));
 }
 
 void MainWindow::closeDlg() {
@@ -83,7 +84,7 @@ void* readThread(void* arg) {
     while(1) {
 	    char buf[PACKETSIZE];
 	    if(recv_packet(mw->getSock(), buf) != 0) {
-	        mw->addChatText(QString(buf));
+	        emit(mw->displayBuf(buf));
 	    }
     }
     return arg;

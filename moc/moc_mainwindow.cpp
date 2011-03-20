@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Sun Mar 20 02:11:25 2011
+** Created: Sun Mar 20 10:26:43 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.1)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,32 +23,33 @@ static const uint qt_meta_data_MainWindow[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       1,       // signalCount
+       2,       // signalCount
 
  // signals: signature, parameters, type, tag, flags
       21,   12,   11,   11, 0x05,
+      50,   45,   11,   11, 0x05,
 
  // slots: signature, parameters, type, tag, flags
-      45,   11,   11,   11, 0x0a,
-      56,   12,   11,   11, 0x0a,
-      82,   11,   11,   11, 0x0a,
-      92,   11,   11,   11, 0x0a,
-     103,   11,   11,   11, 0x0a,
-     122,  117,   11,   11, 0x0a,
+      67,   11,   11,   11, 0x0a,
+      78,   12,   11,   11, 0x0a,
+     104,   11,   11,   11, 0x0a,
+     114,   11,   11,   11, 0x0a,
+     125,   11,   11,   11, 0x0a,
+     139,   45,   11,   11, 0x0a,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_MainWindow[] = {
     "MainWindow\0\0servaddr\0connectServer(QString&)\0"
-    "sendText()\0connectToServer(QString&)\0"
-    "openDlg()\0closeDlg()\0getServInfo()\0"
-    "text\0addChatText(QString)\0"
+    "text\0display(QString)\0sendText()\0"
+    "connectToServer(QString&)\0openDlg()\0"
+    "closeDlg()\0getServInfo()\0addChatText(QString)\0"
 };
 
 const QMetaObject MainWindow::staticMetaObject = {
@@ -81,15 +82,16 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: connectServer((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 1: sendText(); break;
-        case 2: connectToServer((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 3: openDlg(); break;
-        case 4: closeDlg(); break;
-        case 5: getServInfo(); break;
-        case 6: addChatText((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 1: display((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 2: sendText(); break;
+        case 3: connectToServer((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 4: openDlg(); break;
+        case 5: closeDlg(); break;
+        case 6: getServInfo(); break;
+        case 7: addChatText((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }
@@ -99,5 +101,12 @@ void MainWindow::connectServer(QString & _t1)
 {
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
+
+// SIGNAL 1
+void MainWindow::display(QString _t1)
+{
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 QT_END_MOC_NAMESPACE
