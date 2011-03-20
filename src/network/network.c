@@ -83,6 +83,10 @@ int listen_server_sock(int sock) {
 }
 
 void closeConnection(int sock) {
+    char buf[PACKETSIZE];
+    memset(buf, 0, PACKETSIZE);
+    strcpy(buf, "close");
+    write(sock, buf, PACKETSIZE);
     close(sock);
 }
 

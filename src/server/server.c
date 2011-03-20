@@ -59,12 +59,12 @@ int main(void) {
 		    char buf[PACKETSIZE];
 		    ssize_t n;
 		    n = recv_packet(readsock, buf);
-		    if(n == -1) {
-		      printf("connection closed\n");
-		      close(readsock);
-		      FD_CLR(readsock, &allset);
-		      clients[j] = -1;
-		    }
+		    if(strcmp(buf, "close") == 0) {
+                printf("closed\n");
+                close(readsock);
+                FD_CLR(readsock, &allset);
+                clients[j] = -1;
+            }
 		    printf("received message\n");
 		    echo(buf);
 
