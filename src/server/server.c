@@ -60,7 +60,7 @@ int main(void) {
 		    ssize_t n;
 		    n = recv_packet(readsock, buf);
 		    if(strcmp(buf, "close") == 0) {
-                remove_select_sock(readsock, &allset, j);
+                remove_select_sock(&allset, readsock, j);
             }
 		    printf("received message\n");
 		    echo(buf);
