@@ -89,9 +89,8 @@ void* readThread(void* arg) {
 
     while(1) {
 	    char buf[PACKETSIZE];
-	    if(recv_packet(mw->getSock(), buf) != 0) {
-	        emit(mw->displayBuf(buf));
-	    }
+	    recv_packet(mw->getSock(), buf);
+        emit(mw->displayBuf(buf));
     }
     return arg;
 }
