@@ -35,7 +35,7 @@ int main(void) {
 		serv_err(SOCK_ERR, "accept");
 	    }
 
-        i = add_select_sock(&allset, acceptsock);
+	    i = add_select_sock(&allset, acceptsock);
 
 	    if (acceptsock > nextsock) {
 		nextsock = acceptsock;
@@ -77,11 +77,11 @@ void echo(char* data) {
     struct sockaddr_in sock;
     size_t socklen;
     for(i = 0; i < FD_SETSIZE; ++i) {
-	if(clients[i] >= 0) {
+	if(clients[i] > 0) {
 	  send_packet(clients[i], data);
+	  getsockname(clients[i], (struct sockaddr*)&sock, &socklen);
+	  printf("echoed to client %s\n", inet_ntoa(sock.sin_addr));
 	}
-	getsockname(clients[i], (struct sockaddr*)&sock, &socklen);
-	printf("echoed to client %s\n", inet_ntoa(sock.sin_addr));
     }
     
 }
