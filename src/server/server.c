@@ -9,7 +9,7 @@ int main(void) {
 
     int listensock, nextsock, acceptsock = 0,
 	readsock;
-    int numselected;//, sid;
+    int numselected;
     fd_set readyset, allset;
     
     //create bind and listen on lsock.
@@ -20,10 +20,7 @@ int main(void) {
     //setup for select
     nextsock = listensock;
     totalclients = -1;
-    init_select(&allset, clients, listensock);
-
-    //create semaphore
-    //sid = initsem();
+    init_select(&allset, listensock);
 
     while(1) {
 
@@ -36,19 +33,19 @@ int main(void) {
 	    int i;
 
 	    if ((acceptsock = accept_connection(acceptsock, listensock)) == -1) {
-		    serv_err(SOCK_ERR, "accept");
+		serv_err(SOCK_ERR, "accept");
 	    }
-	    //P(sid);
-	    i = add_select_sock(&allset, clients, acceptsock);
-	    //V(sid);
+
+            i = add_select_sock(&allset, acceptsock);
+
 	    if (acceptsock > nextsock) {
-		    nextsock = acceptsock;
+		nextsock = acceptsock;
 	    }
 	    if (i > totalclients) {
-		    totalclients = i;
+		totalclients = i;
 	    }
 	    if (--numselected <= 0) {
-		    continue;
+		continue;
 	    }
 
 	}
@@ -56,23 +53,22 @@ int main(void) {
 	for (j = 0; j <= totalclients; j++) {
 
 	    if (clients[j] >= 0) {
-		    readsock = clients[j];
+		readsock = clients[j];
 	    } else {
-		    continue;
+		continue;
 	    }
 
 	    if (FD_ISSET(readsock, &readyset)) {
-		    char buf[PACKETSIZE];
-		    //P(sid);
-		    recv_packet(readsock, buf);
-		    //V(sid);	
-		    echo(buf);
-		    if (--numselected <= 0) {
-		        break;
-		    }
+		char buf[PACKETSIZE];
+
+		recv_packet(readsock, buf);
+
+		echo(buf);
+		if (--numselected <= 0) {
+		    break;
+		}
 	    }
 	}
-
     }
 }
 
