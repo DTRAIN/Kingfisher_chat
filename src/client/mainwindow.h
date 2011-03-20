@@ -48,7 +48,7 @@ private:
     int sock_;
     Ui::MainWindow *ui_;
     Dialog *dialog_;
-    static void* add;
+    pthread_t tid_;
 };
 
 #endif // MAIN_H

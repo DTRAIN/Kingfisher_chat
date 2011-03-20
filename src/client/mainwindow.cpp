@@ -10,6 +10,7 @@ extern "C" {
 int MainWindow::sid_;
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui_(new Ui::MainWindow) {
+    sock_ = 0;
     ui_->setupUi(this);
     connect(ui_->pushButton, SIGNAL(clicked()), this, SLOT(sendText()));
     connect(ui_->actionConnect, SIGNAL(triggered()), this, SLOT(openDlg()));
@@ -47,16 +48,23 @@ void MainWindow::sendText() {
 }
 
 void MainWindow::connectToServer(QString& servaddr) {
-    pthread_t tid;
+    if(sock_ != 0) {
+        return;
+    }
     sock_ = create_sock();
     sock_ = connect_client_sock(sock_, (char*)servaddr.toAscii().constData());
-    if(pthread_create(&tid, NULL, readThread, this) != 0 ) {
+    if(pthread_create(&tid_, NULL, readThread, this) != 0 ) {
 	    serv_err(THREAD_ERR, (char*)"pthread_create");
     }
 }
 
 void MainWindow::disconnectFromServer() {
+    if(sock_ == 0) {
+        return;
+    }
+    pthread_cancel(tid_);
     closeConnection(sock_);
+    sock_ = 0;
 }
 
 void MainWindow::openDlg() {
