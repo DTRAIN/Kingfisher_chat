@@ -59,6 +59,8 @@ int main(void) {
 		    char buf[PACKETSIZE];
 
 		    recv_packet(readsock, buf);
+		    
+		    printf("received message\n");
 		    echo(buf);
 
 		    if (--numselected <= 0) {
@@ -72,9 +74,14 @@ int main(void) {
 void echo(char* data) {
 
     int i;
-
-    for(i = 0; i < totalclients; ++i) {
-        send_packet(clients[i], data);
+    struct sockaddr_in sock;
+    size_t socklen;
+    for(i = 0; i < FD_SETSIZE; ++i) {
+	if(clients[i] >= 0) {
+	  send_packet(clients[i], data);
+	}
+	getsockname(clients[i], (struct sockaddr*)&sock, &socklen);
+	printf("echoed to client %s\n", inet_ntoa(sock.sin_addr));
     }
     
 }

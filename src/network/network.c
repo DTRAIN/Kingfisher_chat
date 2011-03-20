@@ -1,5 +1,6 @@
 #include "network.h"
 #include "errors.h"
+#include <stdio.h>
 int clients[FD_SETSIZE];
 int create_sock(void) {
 
@@ -61,7 +62,7 @@ int bind_server_sock(int sock) {
     if (bind(sock, (struct sockaddr *)&server, sizeof(server)) == -1) {
 	serv_err(SOCK_ERR, "bind");
     }
-    printf("bound to port %d", PORT);
+    printf("bound to port %d\n", PORT);
     return sock;
 }
 
@@ -70,7 +71,7 @@ int accept_connection(int newsock, int listensock) {
     struct sockaddr_in client;
     unsigned int len = sizeof(client);
     newsock = accept(listensock, (struct sockaddr*)&client, &len);
-    printf("accepted connection from client at address: %s", inet_ntoa(client.sin_addr));
+    printf("accepted connection from client at address: %s\n", inet_ntoa(client.sin_addr));
     return newsock;
 }
 
