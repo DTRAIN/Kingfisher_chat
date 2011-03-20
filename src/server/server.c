@@ -2,9 +2,8 @@
 #include "../network/errors.h"
 #include "../network/sems.h"
 void echo(char* data);
-int clients[FD_SETSIZE];
 int totalclients = 0;
-
+extern int clients[FD_SETSIZE];
 int main(void) {
 
     int listensock, nextsock, acceptsock = 0,
