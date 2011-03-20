@@ -9,7 +9,7 @@ int main(void) {
 
     int listensock, nextsock, acceptsock = 0,
 	readsock;
-    int numselected, sid;
+    int numselected;//, sid;
     fd_set readyset, allset;
     
     //create bind and listen on lsock.
@@ -23,7 +23,7 @@ int main(void) {
     init_select(&allset, clients, listensock);
 
     //create semaphore
-    sid = initsem();
+    //sid = initsem();
 
     while(1) {
 
@@ -38,9 +38,9 @@ int main(void) {
 	    if ((acceptsock = accept_connection(acceptsock, listensock)) == -1) {
 		    serv_err(SOCK_ERR, "accept");
 	    }
-	    P(sid);
+	    //P(sid);
 	    i = add_select_sock(&allset, clients, acceptsock);
-	    V(sid);
+	    //V(sid);
 	    if (acceptsock > nextsock) {
 		    nextsock = acceptsock;
 	    }
@@ -63,9 +63,9 @@ int main(void) {
 
 	    if (FD_ISSET(readsock, &readyset)) {
 		    char buf[PACKETSIZE];
-		    P(sid);
+		    //P(sid);
 		    recv_packet(readsock, buf);
-		    V(sid);	
+		    //V(sid);	
 		    echo(buf);
 		    if (--numselected <= 0) {
 		        break;

@@ -80,16 +80,19 @@ int listen_server_sock(int sock) {
 }
 
 int send_packet(int sock, char* packet) {
-    return write(sock, packet, PACKETSIZE);
+    return send(sock, packet, PACKETSIZE, 0);
 }
 
 int recv_packet(int sock, char* buf) {
     int nRead = 0, toRead = PACKETSIZE;
-    while((nRead = read(sock, buf, toRead)) > 0) {
+    while((nRead = recv(sock, buf, toRead, 0)) > 0) {
 	    buf += nRead;
 	    toRead -= nRead;
     }
-    return nRead;
+    if(nRead == -1) {
+        return 0;
+    }
+    return 1;
 }
 
 void init_select(fd_set* set, int* clients, int initsock) {
