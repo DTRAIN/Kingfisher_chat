@@ -31,4 +31,5 @@ int recv_packet(int sock, char* buf);
 void init_select(fd_set* set, int initsock);
 int add_select_sock(fd_set* set, int addsock);
 void closeConnection(int sock);
+void remove_select_sock(fd_set* set, int rmsock, int i);
 #endif

@@ -2,6 +2,7 @@
 #include "errors.h"
 #include <stdio.h>
 int clients[FD_SETSIZE];
+int totalclients = 0;
 int create_sock(void) {
 
     int sock;
@@ -129,4 +130,12 @@ int add_select_sock(fd_set* set, int addsock) {
     FD_SET (addsock, set);
 
     return i;
+}
+
+void remove_select_sock(fd_set* set, int rmsock, int i) {
+    printf("closed\n");
+    close(rmsock);
+    FD_CLR(rmsock, set);
+    clients[i] = -1;
+    totalclients--;
 }

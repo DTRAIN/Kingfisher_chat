@@ -2,7 +2,7 @@
 #include "../network/errors.h"
 #include "../network/sems.h"
 void echo(char* data);
-int totalclients = 0;
+extern int totalclients;
 extern int clients[FD_SETSIZE];
 int main(void) {
 
@@ -60,10 +60,7 @@ int main(void) {
 		    ssize_t n;
 		    n = recv_packet(readsock, buf);
 		    if(strcmp(buf, "close") == 0) {
-                printf("closed\n");
-                close(readsock);
-                FD_CLR(readsock, &allset);
-                clients[j] = -1;
+                remove_select_sock(readsock, &allset, j);
             }
 		    printf("received message\n");
 		    echo(buf);
