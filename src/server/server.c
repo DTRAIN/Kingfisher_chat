@@ -56,18 +56,18 @@ int main(void) {
 	    }
 
 	    if (FD_ISSET(readsock, &readyset)) {
-		    char buf[PACKETSIZE];
-		    ssize_t n;
-		    n = recv_packet(readsock, buf);
-		    if(strcmp(buf, "close") == 0) {
-                remove_select_sock(&allset, readsock, j);
-            }
-		    printf("received message\n");
-		    echo(buf);
+		char buf[PACKETSIZE];
+		ssize_t n;
+		n = recv_packet(readsock, buf);
+		if(strcmp(buf, "close") == 0) {
+		    remove_select_sock(&allset, readsock, j);
+		}
+		printf("received message\n");
+		echo(buf);
 
-		    if (--numselected <= 0) {
-		        break;
-		    }
+		if (--numselected <= 0) {
+		    break;
+		}
 	    }
 	}
     }
@@ -80,9 +80,9 @@ void echo(char* data) {
     size_t socklen;
     for(i = 0; i < FD_SETSIZE; ++i) {
 	if(clients[i] > 0) {
-	  send_packet(clients[i], data);
-	  getsockname(clients[i], (struct sockaddr*)&sock, &socklen);
-	  printf("echoed to client %s\n", inet_ntoa(sock.sin_addr));
+	    send_packet(clients[i], data);
+	    getsockname(clients[i], (struct sockaddr*)&sock, &socklen);
+	    printf("echoed to client %s\n", inet_ntoa(sock.sin_addr));
 	}
     }
     
