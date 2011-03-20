@@ -8,22 +8,22 @@ int create_sock(void) {
     int ret = -1;
 
     if((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-	    serv_err(SOCK_ERR, "socket");
+	serv_err(SOCK_ERR, "socket");
     }
     
     //reuse addr incase of program exit.
     opt = 1;
     if((ret = setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) == -1) {
-	    serv_err(SOCK_ERR, "setsockopt");
+	serv_err(SOCK_ERR, "setsockopt");
     }
 
     //set socket buffer sizes.
     opt = BUFSIZE;
     if((ret = setsockopt(sock, SOL_SOCKET, SO_SNDBUF, &opt, sizeof(opt))) == -1) {
-	    serv_err(SOCK_ERR, "setsockopt");
+	serv_err(SOCK_ERR, "setsockopt");
     }
     if((ret = setsockopt(sock, SOL_SOCKET, SO_RCVBUF, &opt, sizeof(opt)))) {
-	    serv_err(SOCK_ERR, "setsockopt");
+	serv_err(SOCK_ERR, "setsockopt");
     }
 
     return sock;
@@ -40,12 +40,12 @@ int connect_client_sock(int sock, char* host_addr) {
 
     //create hostent.
     if((host = gethostbyname(host_addr)) == NULL) {
-	    return 0;
+	return 0;
     }
 
     memcpy(&(server.sin_addr), host->h_addr, host->h_length);
     if(connect(sock, (struct sockaddr*)&server, sizeof(server)) == -1) {
-	    serv_err(SOCK_ERR, "connect");
+	serv_err(SOCK_ERR, "connect");
     }
     
     return sock;
@@ -59,9 +59,9 @@ int bind_server_sock(int sock) {
     server.sin_addr.s_addr = htonl(INADDR_ANY);
 
     if (bind(sock, (struct sockaddr *)&server, sizeof(server)) == -1) {
-	    serv_err(SOCK_ERR, "bind");
+	serv_err(SOCK_ERR, "bind");
     }
-    
+    printf("bound to port %d", PORT);
     return sock;
 }
 
@@ -69,8 +69,9 @@ int accept_connection(int newsock, int listensock) {
 
     struct sockaddr_in client;
     unsigned int len = sizeof(client);
-    
-    return (newsock = accept(listensock, (struct sockaddr*)&client, &len));
+    newsock = accept(listensock, (struct sockaddr*)&client, &len);
+    printf("accepted connection from client at address: %s", inet_ntoa(client.sin_addr));
+    return newsock;
 }
 
 int listen_server_sock(int sock) {
