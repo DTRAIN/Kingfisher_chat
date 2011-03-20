@@ -30,5 +30,4 @@ int send_packet(int sock, char* packet);
 int recv_packet(int sock, char* buf);
 void init_select(fd_set* set, int initsock);
 int add_select_sock(fd_set* set, int addsock);
-extern int clients[FD_SETSIZE];
 #endif

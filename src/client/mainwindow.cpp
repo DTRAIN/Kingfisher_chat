@@ -49,7 +49,7 @@ void MainWindow::connectToServer(QString& servaddr) {
     sock_ = create_sock();
     sock_ = connect_client_sock(sock_, (char*)servaddr.toAscii().constData());
     if(pthread_create(&tid, NULL, readThread, this) != 0 ) {
-	serv_err(THREAD_ERR, (char*)"pthread_create");
+	    serv_err(THREAD_ERR, (char*)"pthread_create");
     }
 }
 
@@ -81,10 +81,10 @@ void* readThread(void* arg) {
     MainWindow* mw = (MainWindow*) arg;
 
     while(1) {
-	char buf[PACKETSIZE];
-	if(recv_packet(mw->getSock(), buf) != 0) {
-	    mw->addChatText(QString(buf));
-	}
+	    char buf[PACKETSIZE];
+	    if(recv_packet(mw->getSock(), buf) != 0) {
+	        mw->addChatText(QString(buf));
+	    }
     }
     return arg;
 }
