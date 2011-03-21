@@ -12,6 +12,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include "errors.h"
+#define IP_SIZE 16
 #define PORT 10127
 #define PACKETSIZE 4096
 #define BUFSIZE ((PACKETSIZE)*(10))
@@ -27,4 +28,5 @@ void init_select(fd_set* set, int initsock);
 int add_select_sock(fd_set* set, int addsock);
 void closeConnection(int sock);
 void remove_select_sock(fd_set* set, int rmsock, int i);
+void print_clients();
 #endif

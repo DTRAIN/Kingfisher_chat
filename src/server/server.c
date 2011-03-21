@@ -4,6 +4,7 @@
 void echo(char* data);
 extern int totalclients;
 extern int clients[FD_SETSIZE];
+extern char connections[FD_SETSIZE][IP_SIZE];
 /*------------------------------------------------------------------------------------------------------------------
 --  SOURCE FILE: main.c - A simple chat echo server. This server is part of a simple chat echo client / server application.
 --                        
@@ -80,6 +81,9 @@ int server(void) {
 	        if (i > totalclients) {
 		        totalclients = i;
 	        }
+
+            print_clients();
+
 	        if (--numselected <= 0) {
 		        continue;
 	        }
