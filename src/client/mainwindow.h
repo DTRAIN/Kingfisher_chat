@@ -20,7 +20,6 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    static int sid_;
     explicit MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
     QString getUserText();
@@ -29,7 +28,7 @@ public:
         emit(display(buf));
     }
     int getSock() {
-	return sock_;
+	    return sock_;
     }
 signals:
     void connectServer(QString& servaddr);

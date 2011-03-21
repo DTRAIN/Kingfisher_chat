@@ -7,8 +7,7 @@
 extern "C" {
 #include "../network/network.h"
 }
-int MainWindow::sid_;
-
+/* CONSTRUCTOR */
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui_(new Ui::MainWindow) {
     sock_ = 0;
     ui_->setupUi(this);
@@ -18,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui_(new Ui::MainWi
     connect(ui_->actionClose, SIGNAL(triggered()), this, SLOT(disconnectFromServer()));
 }
 
+/* DESTRUCTOR */
 MainWindow::~MainWindow() {
     closeConnection(sock_);
     delete MainWindow::ui_;
