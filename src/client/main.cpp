@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QIcon>
+#include <QString>
 /*------------------------------------------------------------------------------------------------------------------
 --  SOURCE FILE: main.c - A simple chat client. This client is part of a simple chat echo client / server application.
 --                        
@@ -51,8 +53,8 @@
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
     MainWindow* mw = new MainWindow;
+    app.setWindowIcon(QIcon(QString("./img/icon.jpg")));
     mw->show();
-    app.setWindowIcon(QIcon(QString("../img/icon.jpg")));
     return app.exec();
 
 }
