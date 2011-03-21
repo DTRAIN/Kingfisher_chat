@@ -51,8 +51,8 @@
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
     MainWindow* mw = new MainWindow;
-
     mw->show();
+    app.setWindowIcon(QIcon(QString("../img/icon.jpg")));
     return app.exec();
 
 }
