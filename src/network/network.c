@@ -79,14 +79,16 @@ int connect_client_sock(int sock, char* host_addr) {
 
     //create hostent.
     if((host = gethostbyname(host_addr)) == NULL) {
+        printf("failed to resolve hostname\n");
 	    return 0;
     }
 
     memcpy(&(server.sin_addr), host->h_addr, host->h_length);
     if(connect(sock, (struct sockaddr*)&server, sizeof(server)) == -1) {
-	    serv_err(SOCK_ERR, "connect");
+        printf("connection refused by server\n");
+	    return 0;
     }
-    
+    printf("connected to server\n");
     return sock;
 }
 /*------------------------------------------------------------------------------------------------------------------
@@ -357,7 +359,7 @@ int add_select_sock(fd_set* set, int addsock) {
   -- removes a socket from an FD_SET for select.
   ----------------------------------------------------------------------------------------------------------------------*/
 void remove_select_sock(fd_set* set, int rmsock, int i) {
-    printf("closed\n");
+    printf("session terminated by client\n");
     close(rmsock);
     FD_CLR(rmsock, set);
     clients[i] = -1;
