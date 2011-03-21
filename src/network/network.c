@@ -2,7 +2,6 @@
 #include "errors.h"
 #include <stdio.h>
 int clients[FD_SETSIZE];
-char connections[FD_SETSIZE][IP_SIZE];
 int totalclients = 0;
 /*------------------------------------------------------------------------------------------------------------------
   -- FUNCTION: create_sock
@@ -329,7 +328,6 @@ int add_select_sock(fd_set* set, int addsock) {
     for (i = 0; i < FD_SETSIZE; i++) {
         if (clients[i] < 0) {
             getsockname(addsock, (struct sockaddr*)&sockname, &socklen);
-            strcpy(connections[i], inet_ntoa(sockname.sin_addr));
             clients[i] = addsock;
             break;
         }
@@ -369,17 +367,8 @@ void remove_select_sock(fd_set* set, int rmsock, int i) {
     printf("session terminated by client\n");
     close(rmsock);
     FD_CLR(rmsock, set);
-    memset(connections[i], 0, IP_SIZE);
     clients[i] = -1;
     totalclients--;
 
-    print_clients();
 }
 
-void print_clients() {
-    int i;
-    printf("all currently connected clients:\n");
-    for(i = 0; i < totalclients; ++i) {
-        printf("%s\n", connections[i]);
-    }
-}
