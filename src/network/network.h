@@ -11,6 +11,7 @@
 #include <strings.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include "errors.h"
 #define IP_SIZE 16
 #define PORT 10127
@@ -28,5 +29,12 @@ void init_select(fd_set* set, int initsock);
 int add_select_sock(fd_set* set, int addsock);
 void closeConnection(int sock);
 void remove_select_sock(fd_set* set, int rmsock, int i);
-void print_clients();
+void add_connection(char* claddr);
+void rm_connection(char* claddr);
+void print_connections(void);
+void sig_handler(int);
+int open_log_file(void);
+void log_data(char* data, int fd);
+void close_log_file(int fd);
+void echo(char* data);
 #endif

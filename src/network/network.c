@@ -2,7 +2,9 @@
 #include "errors.h"
 #include <stdio.h>
 int clients[FD_SETSIZE];
+char connections[FD_SETSIZE][IP_SIZE];
 int totalclients = 0;
+int connectionIndex = 0;
 /*------------------------------------------------------------------------------------------------------------------
   -- FUNCTION: create_sock
   --
@@ -259,12 +261,13 @@ int send_packet(int sock, char* packet) {
   -- reads a packet from a specified socket.
   ----------------------------------------------------------------------------------------------------------------------*/
 int recv_packet(int sock, char* buf) {
-    int nRead = 0, toRead = PACKETSIZE;
+    int nRead = 0, toRead = PACKETSIZE, totalRead = 0;
     while((nRead = read(sock, buf, toRead)) > 0) {
         buf += nRead;
         toRead -= nRead;
+        totalRead += nRead;
     }
-    return nRead;
+    return totalRead;
 }
 /*------------------------------------------------------------------------------------------------------------------
   -- FUNCTION: init_select
@@ -370,5 +373,77 @@ void remove_select_sock(fd_set* set, int rmsock, int i) {
     clients[i] = -1;
     totalclients--;
 
+}
+
+void add_connection(char* claddr) {
+    strcpy(connections[connectionIndex++], claddr); 
+}
+
+void rm_connection(char* claddr) {
+    int i;
+    for(i = 0; i < connectionIndex; ++i) {
+        if(strcmp(claddr, connections[i]) == 0) {
+            memset(connections[i], 0, IP_SIZE);
+            connectionIndex--;
+        }
+    }
+}
+
+void print_connections(void) {
+    int i;
+    printf("clients connected:\n");
+    for(i = 0; i < connectionIndex; ++i) {
+        printf("%s\n", connections[i]);
+    }
+}
+
+void sig_handler(int i) {
+    echo("close");
+    exit(0);
+}
+/*------------------------------------------------------------------------------------------------------------------
+  -- FUNCTION: echo
+  --
+  -- DATE: March 20, 2011
+  --
+  -- REVISIONS: (Date and Description)
+  --
+  -- DESIGNER: Duncan Donaldson.
+  --
+  -- PROGRAMMER: Duncan Donaldson.
+  --
+  -- INTERFACE: void echo(char* data)
+  --                -data -- the data to be echoed to clients.
+  --
+  -- RETURNS: void
+  --
+  -- NOTES:
+  -- echoes a received packet to all currently connected clients.
+  ----------------------------------------------------------------------------------------------------------------------*/
+void echo(char* data) {
+
+    int i;
+
+    printf("echoed message to clients\n");
+    for(i = 0; i < FD_SETSIZE; ++i) {
+	    if(clients[i] > 0) {
+	        send_packet(clients[i], data);
+	    }
+    }
+    
+}
+
+int open_log_file(void) {
+    return open("./log.txt", O_WRONLY|O_CREAT, S_IWUSR|S_IRUSR);
+}
+
+void log_data(char* data, int fd) {
+    ssize_t i;
+    i = write(fd, data, strlen(data));
+    i = write(fd, "\n", 1);
+}
+
+void close_log_file(int fd) {
+    close(fd);
 }
 

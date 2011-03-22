@@ -14,6 +14,7 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QCheckBox>
 #include <QtGui/QDialog>
 #include <QtGui/QDialogButtonBox>
 #include <QtGui/QHeaderView>
@@ -30,6 +31,7 @@ public:
     QLabel *label;
     QLineEdit *lineEdit_2;
     QLabel *label_2;
+    QCheckBox *checkBox;
 
     void setupUi(QDialog *Dialog)
     {
@@ -38,7 +40,7 @@ public:
         Dialog->resize(244, 208);
         buttonBox = new QDialogButtonBox(Dialog);
         buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
-        buttonBox->setGeometry(QRect(-150, 150, 351, 31));
+        buttonBox->setGeometry(QRect(-140, 170, 351, 31));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
         lineEdit = new QLineEdit(Dialog);
@@ -53,6 +55,9 @@ public:
         label_2 = new QLabel(Dialog);
         label_2->setObjectName(QString::fromUtf8("label_2"));
         label_2->setGeometry(QRect(20, 90, 201, 17));
+        checkBox = new QCheckBox(Dialog);
+        checkBox->setObjectName(QString::fromUtf8("checkBox"));
+        checkBox->setGeometry(QRect(20, 150, 96, 22));
 
         retranslateUi(Dialog);
         QObject::connect(buttonBox, SIGNAL(accepted()), Dialog, SLOT(accept()));
@@ -66,6 +71,7 @@ public:
         Dialog->setWindowTitle(QApplication::translate("Dialog", "Connect to Server", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("Dialog", "Server Address:", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("Dialog", "Username:", 0, QApplication::UnicodeUTF8));
+        checkBox->setText(QApplication::translate("Dialog", "log to file", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

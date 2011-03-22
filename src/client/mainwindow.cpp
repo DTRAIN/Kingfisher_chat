@@ -10,6 +10,7 @@ extern "C" {
 /* CONSTRUCTOR */
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui_(new Ui::MainWindow) {
     sock_ = 0;
+    log_ = false;
     ui_->setupUi(this);
     connect(ui_->pushButton, SIGNAL(clicked()), this, SLOT(sendText()));
     connect(ui_->actionConnect, SIGNAL(triggered()), this, SLOT(openDlg()));
@@ -19,8 +20,14 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui_(new Ui::MainWi
 
 /* DESTRUCTOR */
 MainWindow::~MainWindow() {
+
+    if(log_ == true) {
+        close_log_file(logfd_);
+    }
     closeConnection(sock_);
+    pthread_cancel(tid_);
     delete MainWindow::ui_;
+
 }
 /*------------------------------------------------------------------------------------------------------------------
   -- FUNCTION: getUserText
@@ -140,11 +147,18 @@ void MainWindow::connectToServer(QString& servaddr) {
     if(sock_ != 0) {
         return;
     }
+
+    if(log_ == true) {
+        logfd_ = open_log_file();
+    }
+
     sock_ = create_sock();
     sock_ = connect_client_sock(sock_, (char*)servaddr.toAscii().constData());
+
     if(pthread_create(&tid_, NULL, readThread, this) != 0 ) {
 	    serv_err(THREAD_ERR, (char*)"pthread_create");
     }
+
 }
 /*------------------------------------------------------------------------------------------------------------------
   -- FUNCTION: disconnectFromServer
@@ -167,6 +181,9 @@ void MainWindow::connectToServer(QString& servaddr) {
 void MainWindow::disconnectFromServer() {
     if(sock_ == 0) {
         return;
+    }
+    if(log_ == true) {
+        close_log_file(logfd_);
     }
     pthread_cancel(tid_);
     closeConnection(sock_);
@@ -245,7 +262,9 @@ void MainWindow::getServInfo() {
 
     QString servaddr(dialog_->ui->lineEdit->text());
     QString username(dialog_->ui->lineEdit_2->text());
-
+    if(dialog_->ui->checkBox->isChecked() == true) {
+        log_ = true;
+    }
     username_ = username;
     servaddr_ = servaddr;
 
@@ -273,8 +292,16 @@ void* readThread(void* arg) {
     MainWindow* mw = (MainWindow*) arg;
 
     while(1) {
-	    char buf[PACKETSIZE];
-	    recv_packet(mw->getSock(), buf);
+        char buf[PACKETSIZE];
+
+        recv_packet(mw->getSock(), buf);
+        if(strcmp(buf, "close") == 0) {
+            close(mw->getSock());
+            return arg;
+        }
+        if(mw->getLog() == true) {
+            log_data(buf, mw->getLogFD());
+        }
         emit(mw->displayBuf(buf));
     }
     return arg;

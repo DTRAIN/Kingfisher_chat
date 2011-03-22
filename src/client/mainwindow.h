@@ -30,6 +30,13 @@ public:
     int getSock() {
 	    return sock_;
     }
+    bool getLog() {
+        return log_;
+    }
+    int getLogFD() {
+        return logfd_;
+    }
+
 signals:
     void connectServer(QString& servaddr);
     void display(QString text);
@@ -44,6 +51,8 @@ public slots:
 private:
     QString username_;
     QString servaddr_;
+    bool log_;
+    int logfd_;
     int sock_;
     Ui::MainWindow *ui_;
     Dialog *dialog_;

@@ -1,7 +1,13 @@
 #include "../network/network.h"
 #include "../network/errors.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <signal.h>
+
 #define server main
-void echo(char* data);
+
+//a couple globals :(
 extern int totalclients;
 extern int clients[FD_SETSIZE];
 /*------------------------------------------------------------------------------------------------------------------
@@ -43,11 +49,14 @@ extern int clients[FD_SETSIZE];
 ----------------------------------------------------------------------------------------------------------------------*/
 int server(void) {
 
-    int listensock, nextsock, acceptsock = 0,
-	readsock;
-    int numselected;
+    int listensock, nextsock, acceptsock = 0, readsock;
+    int numselected;   
     fd_set readyset, allset;
     
+    //handle signals
+    signal(SIGINT, sig_handler);
+    signal(SIGTERM, sig_handler);
+
     //create bind and listen on lsock.
     listensock = create_sock();
     listensock = bind_server_sock(listensock);
@@ -61,6 +70,8 @@ int server(void) {
     while(1) {
 
 	    int j;
+        struct sockaddr_in sock;
+        size_t socklen;
 	    readyset = allset;
 	    numselected = select(nextsock+1, &readyset, NULL, NULL, NULL);
 
@@ -81,6 +92,10 @@ int server(void) {
 		        totalclients = i;
 	        }
 
+            getsockname(nextsock, (struct sockaddr*)&sock, &socklen);
+            add_connection(inet_ntoa(sock.sin_addr));
+            print_connections();
+
 	        if (--numselected <= 0) {
 		        continue;
 	        }
@@ -96,12 +111,28 @@ int server(void) {
 	        if (FD_ISSET(readsock, &readyset)) {
 		        char buf[PACKETSIZE];
 		        ssize_t n;
+                
+                //blank buffer
+                memset(buf, 0, PACKETSIZE);
+                //read packet
 		        n = recv_packet(readsock, buf);
+                
+
+                //if close message, remove socket.
 		        if(strcmp(buf, "close") == 0) {
+                    
+                    //get connection info, add connection to list
+                    getsockname(readsock, (struct sockaddr*)&sock, &socklen);
+                    rm_connection(inet_ntoa(sock.sin_addr));
+                    print_connections();
+
 		            remove_select_sock(&allset, readsock, j);
+
 		        } else {
+                    //otherwise echo
 		            printf("received message\n");
 		            echo(buf);
+
                 }
 	            if (--numselected <= 0) {
 	                break;
@@ -110,34 +141,4 @@ int server(void) {
 	    }
     }
 }
-/*------------------------------------------------------------------------------------------------------------------
-  -- FUNCTION: echo
-  --
-  -- DATE: March 20, 2011
-  --
-  -- REVISIONS: (Date and Description)
-  --
-  -- DESIGNER: Duncan Donaldson.
-  --
-  -- PROGRAMMER: Duncan Donaldson.
-  --
-  -- INTERFACE: void echo(char* data)
-  --                -data -- the data to be echoed to clients.
-  --
-  -- RETURNS: void
-  --
-  -- NOTES:
-  -- echoes a received packet to all currently connected clients.
-  ----------------------------------------------------------------------------------------------------------------------*/
-void echo(char* data) {
 
-    int i;
-
-    printf("echoed message to clients\n");
-    for(i = 0; i < FD_SETSIZE; ++i) {
-	    if(clients[i] > 0) {
-	        send_packet(clients[i], data);
-	    }
-    }
-    
-}
