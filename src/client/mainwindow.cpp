@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui_(new Ui::MainWi
     connect(ui_->actionConnect, SIGNAL(triggered()), this, SLOT(openDlg()));
     connect(ui_->actionQuit_2, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
     connect(ui_->actionClose, SIGNAL(triggered()), this, SLOT(disconnectFromServer()));
+    connect(this, SIGNAL(destroyed()), this, SLOT(disconnectFromServer()));
 }
 
 /* DESTRUCTOR */
@@ -24,7 +25,7 @@ MainWindow::~MainWindow() {
     if(log_ == true) {
         close_log_file(logfd_);
     }
-    closeConnection(sock_);
+    disconnectFromServer();
     pthread_cancel(tid_);
     delete MainWindow::ui_;
 

@@ -267,6 +267,7 @@ int recv_packet(int sock, char* buf) {
         toRead -= nRead;
         totalRead += nRead;
     }
+
     return totalRead;
 }
 /*------------------------------------------------------------------------------------------------------------------
@@ -374,11 +375,47 @@ void remove_select_sock(fd_set* set, int rmsock, int i) {
     totalclients--;
 
 }
-
+/*------------------------------------------------------------------------------------------------------------------
+  -- FUNCTION: add_connection
+  --
+  -- DATE: March 20, 2011
+  --
+  -- REVISIONS: (Date and Description)
+  --
+  -- DESIGNER: Duncan Donaldson.
+  --
+  -- PROGRAMMER: Duncan Donaldson.
+  --
+  -- INTERFACE: void add_connection(char* claddr)
+  --                -claddr -- the connection to be added
+  --
+  -- RETURNS: void
+  --
+  -- NOTES:
+  -- adds a client connection to the list.
+  ----------------------------------------------------------------------------------------------------------------------*/
 void add_connection(char* claddr) {
     strcpy(connections[connectionIndex++], claddr); 
 }
-
+/*------------------------------------------------------------------------------------------------------------------
+  -- FUNCTION: rm_connection
+  --
+  -- DATE: March 20, 2011
+  --
+  -- REVISIONS: (Date and Description)
+  --
+  -- DESIGNER: Duncan Donaldson.
+  --
+  -- PROGRAMMER: Duncan Donaldson.
+  --
+  -- INTERFACE: void rm_connection(char* claddr)
+  --                -claddr -- the connection to be removed
+  --
+  -- RETURNS: void
+  --
+  -- NOTES:
+  -- removes a client connection from the list.
+  ----------------------------------------------------------------------------------------------------------------------*/
 void rm_connection(char* claddr) {
     int i;
     for(i = 0; i < connectionIndex; ++i) {
@@ -388,7 +425,24 @@ void rm_connection(char* claddr) {
         }
     }
 }
-
+/*------------------------------------------------------------------------------------------------------------------
+  -- FUNCTION: print_connections
+  --
+  -- DATE: March 20, 2011
+  --
+  -- REVISIONS: (Date and Description)
+  --
+  -- DESIGNER: Duncan Donaldson.
+  --
+  -- PROGRAMMER: Duncan Donaldson.
+  --
+  -- INTERFACE: void print_connections(void)
+  --
+  -- RETURNS: void
+  --
+  -- NOTES:
+  -- prints all connections
+  ----------------------------------------------------------------------------------------------------------------------*/
 void print_connections(void) {
     int i;
     printf("clients connected:\n");
@@ -396,7 +450,25 @@ void print_connections(void) {
         printf("%s\n", connections[i]);
     }
 }
-
+/*------------------------------------------------------------------------------------------------------------------
+  -- FUNCTION: sig_handler
+  --
+  -- DATE: March 20, 2011
+  --
+  -- REVISIONS: (Date and Description)
+  --
+  -- DESIGNER: Duncan Donaldson.
+  --
+  -- PROGRAMMER: Duncan Donaldson.
+  --
+  -- INTERFACE: void sig_handler(int i)
+  --                - i -- ignore this
+  --
+  -- RETURNS: void
+  --
+  -- NOTES:
+  -- handles signals like a beast.
+  ----------------------------------------------------------------------------------------------------------------------*/
 void sig_handler(int i) {
     echo("close");
     exit(0);
@@ -432,17 +504,71 @@ void echo(char* data) {
     }
     
 }
-
+/*------------------------------------------------------------------------------------------------------------------
+  -- FUNCTION: open_log_file
+  --
+  -- DATE: March 20, 2011
+  --
+  -- REVISIONS: (Date and Description)
+  --
+  -- DESIGNER: Duncan Donaldson.
+  --
+  -- PROGRAMMER: Duncan Donaldson.
+  --
+  -- INTERFACE: int open_log_file(void)
+  --
+  -- RETURNS: the file descriptor to the newly opened log file.
+  --
+  -- NOTES:
+  -- opens a log file for server logging.
+  ----------------------------------------------------------------------------------------------------------------------*/
 int open_log_file(void) {
     return open("./log.txt", O_WRONLY|O_CREAT, S_IWUSR|S_IRUSR);
 }
-
+/*------------------------------------------------------------------------------------------------------------------
+  -- FUNCTION: log_data
+  --
+  -- DATE: March 20, 2011
+  --
+  -- REVISIONS: (Date and Description)
+  --
+  -- DESIGNER: Duncan Donaldson.
+  --
+  -- PROGRAMMER: Duncan Donaldson.
+  --
+  -- INTERFACE: void log_data(char* data, int fd)
+  --                    - data -- the data to be logged
+  --                    - fd   -- the log file descriptor
+  --
+  -- RETURNS: void
+  --
+  -- NOTES:
+  -- writes some data to a log file.
+  ----------------------------------------------------------------------------------------------------------------------*/
 void log_data(char* data, int fd) {
     ssize_t i;
     i = write(fd, data, strlen(data));
     i = write(fd, "\n", 1);
 }
-
+/*------------------------------------------------------------------------------------------------------------------
+  -- FUNCTION: close_log_file
+  --
+  -- DATE: March 20, 2011
+  --
+  -- REVISIONS: (Date and Description)
+  --
+  -- DESIGNER: Duncan Donaldson.
+  --
+  -- PROGRAMMER: Duncan Donaldson.
+  --
+  -- INTERFACE: void close_log_file(char* data, int fd)
+  --                    - fd   -- the log file descriptor
+  --
+  -- RETURNS: void
+  --
+  -- NOTES:
+  -- closes a log file descriptor.
+  ----------------------------------------------------------------------------------------------------------------------*/
 void close_log_file(int fd) {
     close(fd);
 }

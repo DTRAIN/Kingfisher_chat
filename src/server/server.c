@@ -56,6 +56,7 @@ int server(void) {
     //handle signals
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
+    signal(SIGPIPE, sig_handler);
 
     //create bind and listen on lsock.
     listensock = create_sock();
@@ -82,16 +83,15 @@ int server(void) {
 	        if ((acceptsock = accept_connection(acceptsock, listensock)) == -1) {
 		        serv_err(SOCK_ERR, "accept");
 	        }
-
 	        i = add_select_sock(&allset, acceptsock);
-
 	        if (acceptsock > nextsock) {
 		        nextsock = acceptsock;
 	        }
 	        if (i > totalclients) {
 		        totalclients = i;
 	        }
-
+            
+            //add connection.
             getsockname(nextsock, (struct sockaddr*)&sock, &socklen);
             add_connection(inet_ntoa(sock.sin_addr));
             print_connections();
@@ -102,6 +102,7 @@ int server(void) {
 
 	    }
 
+        //check sockets for data
 	    for (j = 0; j <= totalclients; j++) {
 
 	        if ((readsock = clients[j]) < 0) {
@@ -114,21 +115,21 @@ int server(void) {
                 
                 //blank buffer
                 memset(buf, 0, PACKETSIZE);
+
                 //read packet
 		        n = recv_packet(readsock, buf);
-                
-
+               
                 //if close message, remove socket.
-		        if(strcmp(buf, "close") == 0) {
-                    
-                    //get connection info, add connection to list
+		        if(strcmp(buf, "close") == 0) {  
+             
+                    //get connection info, remove connection from list
                     getsockname(readsock, (struct sockaddr*)&sock, &socklen);
                     rm_connection(inet_ntoa(sock.sin_addr));
+		            remove_select_sock(&allset, readsock, j);
                     print_connections();
 
-		            remove_select_sock(&allset, readsock, j);
-
 		        } else {
+
                     //otherwise echo
 		            printf("received message\n");
 		            echo(buf);
@@ -137,6 +138,7 @@ int server(void) {
 	            if (--numselected <= 0) {
 	                break;
 	            }
+
 	        }
 	    }
     }
